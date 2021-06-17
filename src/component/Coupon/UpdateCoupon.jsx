@@ -18,8 +18,8 @@ function UpdateCoupon(props) {
     const [number, setNumber] = useState('');
     const [payment, setPayment] = useState([]);
     const [rank, setRank] = useState([]);
-    const [paymentChoose, setPaymentChoose] = useState('6086709cdc52ab1ae999e755');
-    const [rankChoose, setRankChoose] = useState('');
+    const [paymentChoose, setPaymentChoose] = useState("");
+    const [rankChoose, setRankChoose] = useState("");
 
     const [validationMsg, setValidationMsg] = useState('');
     const { handleSubmit } = useForm();
@@ -27,6 +27,7 @@ function UpdateCoupon(props) {
     useEffect(() => {
         const fetchAllData = async () => {
             const response = await couponAPI.getCreate();
+
             setPayment(response.payment)
             setRank(response.rank)
         }
@@ -44,6 +45,7 @@ function UpdateCoupon(props) {
             setStartDate(new Date(response.startDate))
             setEndDate(new Date(response.endDate))
             response.id_payment && setPaymentChoose(response.id_payment._id)
+            response.id_rank && setRankChoose(response.id_rank._id)
         }
         fetchAllData()
     }, [id])
@@ -203,7 +205,7 @@ function UpdateCoupon(props) {
                                     <div className="form-group w-50">
                                         <label htmlFor="payment" className="mr-2">Chọn loại thanh toán:</label>
                                         <select name="payment" id="payment" value={paymentChoose} onChange={(e) => setPaymentChoose(e.target.value)}>
-                                            <option value="6086709cdc52ab1ae999e755">Tất cả hình thức thanh toán</option>
+                                            <option value="">Tất cả hình thức thanh toán</option>
                                             {
                                                 payment && payment.map((item, index) => (
                                                     <option value={item._id} key={index} >{item.pay_name}</option>
@@ -217,7 +219,7 @@ function UpdateCoupon(props) {
                                     <div className="form-group w-50">
                                         <label htmlFor="rank" className="mr-2">Chọn thành viên:</label>
                                         <select name="rank" id="rank" value={rankChoose} onChange={(e) => setRankChoose(e.target.value)}>
-                                            <option >Tất cả khách hàng</option>
+                                            <option value="">Tất cả khách hàng</option>
                                             {
                                                 rank && rank.map((item, index) => (
                                                     <option value={item._id} key={index} >{item.rank}</option>

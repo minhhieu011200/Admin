@@ -15,7 +15,7 @@ function CreateCoupon(props) {
     const [number, setNumber] = useState('');
     const [payment, setPayment] = useState([]);
     const [rank, setRank] = useState([]);
-    const [paymentChoose, setPaymentChoose] = useState('6086709cdc52ab1ae999e755');
+    const [paymentChoose, setPaymentChoose] = useState("");
     const [rankChoose, setRankChoose] = useState('');
 
     const [validationMsg, setValidationMsg] = useState('');
@@ -193,7 +193,7 @@ function CreateCoupon(props) {
                                     <div className="form-group w-50">
                                         <label htmlFor="payment" className="mr-2">Chọn loại thanh toán:</label>
                                         <select name="payment" id="payment" value={paymentChoose} onChange={(e) => setPaymentChoose(e.target.value)}>
-                                            <option value="6086709cdc52ab1ae999e755">Tất cả hình thức thanh toán</option>
+                                            <option value="">Tất cả hình thức thanh toán</option>
                                             {
                                                 payment && payment.map((item, index) => (
                                                     <option value={item._id} key={index} >{item.pay_name}</option>
@@ -207,10 +207,10 @@ function CreateCoupon(props) {
                                     <div className="form-group w-50">
                                         <label htmlFor="rank" className="mr-2">Chọn thành viên:</label>
                                         <select name="rank" id="rank" value={rankChoose} onChange={(e) => setRankChoose(e.target.value)}>
-                                            <option >Tất cả khách hàng</option>
+                                            <option value="">Tất cả khách hàng</option>
                                             {
                                                 rank && rank.map((item, index) => (
-                                                    <option value={item._id} key={index} >{item.rank}</option>
+                                                    <option value={item._id} key={index}>{item.rank}</option>
                                                 ))
                                             }
 
