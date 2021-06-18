@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import queryString from 'query-string'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import cookie from "react-cookies"
 
 import orderAPI from '../Api/orderAPI';
 import Pagination from '../Shared/Pagination'
@@ -43,6 +44,44 @@ function Order(props) {
 
         fetchAllData()
     }, [filter])
+
+    const handler_Report = () => {
+
+        // source code HTML table to PDF
+
+        var sTable = document.getElementById('customers').innerHTML;
+
+        var style = "<style>";
+        style = style + "table {width: 100%;font: 17px Calibri;}";
+        style = style + "table, th, td {border: solid 1px #DDD; border-collapse: collapse;";
+        style = style + "padding: 2px 3px;text-align: center;}";
+        style = style + "</style>";
+
+        // CREATE A WINDOW OBJECT.
+        var win = window.open('', '', 'height=900,width=1000');
+
+        win.document.write('<html><head>');
+        win.document.write('<title>Statics</title>');   // <title> FOR PDF HEADER.
+        win.document.write(style);
+        win.document.write('</head>');
+        win.document.write('<body>');
+        win.document.write(sTable);
+        win.document.write(`<h4 style="text-align:right">Ngày thông kê: ${new Intl.DateTimeFormat("it-IT", {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+            second: "numeric"
+        }).format(new Date())}</h4>`);
+        win.document.write(`<h4 style="text-align:right">Nhân viên thống kê: ${cookie.load('user').fullname}</h4>`);
+        win.document.write('</body></html>');
+
+        win.document.close(); 	// CLOSE THE CURRENT WINDOW.
+
+        win.print();    // PRINT THE CONTENTS.
+
+    }
 
 
 
@@ -112,10 +151,15 @@ function Order(props) {
                                         </select>
                                     </div>
                                 </div>
-                                <button type="button" onClick={handleSearch} style={{ cursor: 'pointer', color: 'white' }} className="btn btn-success my-2" >Tìm Kiếm</button>
-                                <h4 className="card-title">TotalMoney: {new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(totalMoney) + ' VNĐ'}</h4>
-                                <div className="table-responsive mt-3">
-                                    <table className="table table-striped table-bordered no-wrap">
+                                <div class="d-flex">
+                                    <button type="button" onClick={handleSearch} className="btn btn-success my-2 mr-2" >Tìm Kiếm</button>
+                                    <button className="btn btn-primary my-2 mr-2" onClick={handler_Report}>Thống Kê</button>
+                                </div>
+
+
+                                <div className="table-responsive mt-3" id="customers">
+                                    <h4 className="card-title">TotalMoney: {new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(totalMoney) + ' VNĐ'}</h4>
+                                    <table className="table table-striped table-bordered no-wrap" id="tab_customers">
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
@@ -178,8 +222,9 @@ function Order(props) {
                                             }
                                         </tbody>
                                     </table>
-                                    <Pagination filter={filter} onPageChange={onPageChange} totalPage={totalPage} />
+
                                 </div>
+                                <Pagination filter={filter} onPageChange={onPageChange} totalPage={totalPage} />
                             </div>
                         </div>
                     </div>
