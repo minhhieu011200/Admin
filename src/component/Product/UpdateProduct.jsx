@@ -66,7 +66,7 @@ function UpdateProduct(props) {
         if (isEmpty(name.trim())) {
             msg.name = "Tên không được để trống"
         }
-        if (isEmpty(price)) {
+        if (isEmpty(price.toString().trim())) {
             msg.price = "Giá không được để trống"
         }
         if (isEmpty(description.trim())) {
