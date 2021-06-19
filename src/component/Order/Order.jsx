@@ -19,7 +19,7 @@ import Search from '../Shared/Search'
 function Order(props) {
     const [filter, setFilter] = useState({
         page: '1',
-        limit: '4',
+        limit: '5',
         search: ''
     })
     const [startDate, setStartDate] = useState(new Date());
@@ -48,8 +48,66 @@ function Order(props) {
     const handler_Report = () => {
 
         // source code HTML table to PDF
+        let htmlContent = ""
+        htmlContent += `<div className="table-responsive mt-3" id="customers"><table className="table table-striped table-bordered no-wrap" id="tab_customers">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>CreateDate</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Status</th>
+                <th>Total Money</th>
+                <th>Payment Methods</th>
+                <th>Payment</th>
+            </tr>
+        </thead>`
+        htmlContent += `
 
-        var sTable = document.getElementById('customers').innerHTML;
+                                            <tbody>
+                                               ${order && order.map((value, index) => (
+            `<tr>
+                                                            <td className="name">${value._id}</td>
+                                                            <td className="li-product-price">
+                                                                <span className="amount">
+                                                                    ${new Intl.DateTimeFormat("it-IT", { year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric", second: "numeric" }).format(new Date(value.createDate))}
+                                                                </span>
+                                                            </td>
+                                                            <td className="name">${value.id_note ? value.id_note.fullname : ""}</td>
+                                                            <td className="name">${value.id_user ? value.id_user.email : ""}</td>
+                                                            <td className="name">${value.id_note ? value.id_note.phone : ""}</td>
+                                                            <td className="name">${value.address}</td>
+                                                            <td>
+                                                                ${(() => { switch (value.status) { case "1": return "Đang xử lý"; case "2": return "Đã xác nhận"; case "3": return "Đang giao"; case "4": return "Hoàn thành"; default: return "Đơn bị hủy"; } })()}
+                                                            </td>
+                                                            <td className="name">${new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(value.total) + ' VNĐ'}</td>
+                                                            <td className="name">${value.id_payment.pay_name}</td>
+                                                            <td className="name">${value.pay === true ? "Đã thanh toán" : "Chưa thanh toán"}</td>                                                     
+                                                        </tr>`
+        ))
+            }
+                                            </tbody>
+                                        </table></div>`
+
+
+
+        // var sTable = document.getElementById('customers').innerHTML;
+
+        htmlContent += `<h4 style="text-align:right">Tổng tiền: ${new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(totalMoney) + ' VNĐ'}</h4>
+        <h4 style="text-align:right">Ngày thông kê: ${new Intl.DateTimeFormat("it-IT", {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+            second: "numeric"
+        }).format(new Date())}
+        </h4>
+        <h4 style="text-align:right">Nhân viên thống kê: ${cookie.load('user').fullname}</h4>
+        <h4 style="text-align:center; marign-top:10px">${filter.page}</h4>
+        `
 
         var style = "<style>";
         style = style + "table {width: 100%;font: 17px Calibri;}";
@@ -58,23 +116,14 @@ function Order(props) {
         style = style + "</style>";
 
         // CREATE A WINDOW OBJECT.
-        var win = window.open('', '', 'height=900,width=1000');
+        var win = window.open('', '', 'height=900,width=2000');
 
         win.document.write('<html><head>');
         win.document.write('<title>Statics</title>');   // <title> FOR PDF HEADER.
         win.document.write(style);
         win.document.write('</head>');
         win.document.write('<body>');
-        win.document.write(sTable);
-        win.document.write(`<h4 style="text-align:right">Ngày thông kê: ${new Intl.DateTimeFormat("it-IT", {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric",
-            hour: "numeric",
-            minute: "numeric",
-            second: "numeric"
-        }).format(new Date())}</h4>`);
-        win.document.write(`<h4 style="text-align:right">Nhân viên thống kê: ${cookie.load('user').fullname}</h4>`);
+        win.document.write(htmlContent);
         win.document.write('</body></html>');
 
         win.document.close(); 	// CLOSE THE CURRENT WINDOW.
@@ -208,7 +257,7 @@ function Order(props) {
                                                                 }
                                                             })()}
                                                         </td>
-                                                        <td className="name">{value.total}</td>
+                                                        <td className="name"> {new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(value.total) + ' VNĐ'}</td>
                                                         <td className="name">{value.id_payment.pay_name}</td>
                                                         <td className="name">{value.pay === true ? "Đã thanh toán" : "Chưa thanh toán"}</td>
                                                         <td>
