@@ -36,7 +36,6 @@ function Order(props) {
 
         const fetchAllData = async () => {
             const od = await orderAPI.statistic(query)
-            console.log(od)
             setTotalPage(od.totalPage)
             setOrder(od.orders)
             setTotalMoney(od.totalMoney)
@@ -49,7 +48,20 @@ function Order(props) {
 
         // source code HTML table to PDF
         let htmlContent = ""
-        htmlContent += `<div className="table-responsive mt-3" id="customers"><table className="table table-striped table-bordered no-wrap" id="tab_customers">
+        htmlContent += `<div className="table-responsive mt-3" id="customers">
+        <h4>Từ: ${new Intl.DateTimeFormat("it-IT", {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric"
+        }).format(new Date(startDate))}
+        <span>&#10142; </span>
+        ${new Intl.DateTimeFormat("it-IT", {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric"
+        }).format(new Date(endDate))}
+        </h4>
+        <table className="table table-striped table-bordered no-wrap" id="tab_customers">
         <thead>
             <tr>
                 <th>ID</th>
