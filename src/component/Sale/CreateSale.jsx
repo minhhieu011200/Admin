@@ -29,7 +29,7 @@ function CreateSale(props) {
         const fetchData = async () => {
             const params = {
                 page: page,
-                count: '4',
+                count: '6',
                 category: loadCategory
             }
 
