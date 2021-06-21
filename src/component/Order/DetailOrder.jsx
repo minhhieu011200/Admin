@@ -177,7 +177,16 @@ function DetailOrder(props) {
                                             {
                                                 details && details.map((value, index) => (
                                                     <tr key={index}>
-                                                        <td><img src={process.env.REACT_APP_API + value.id_product.image} alt="" style={{ width: '70px' }} /></td>
+                                                        <td>
+                                                            {
+                                                                value.id_product ? (
+                                                                    <img src={process.env.REACT_APP_API + value.id_product.image} alt="" style={{ width: '70px' }} />
+                                                                ) : (
+                                                                    <img src="" alt="" style={{ width: '70px' }} />
+                                                                )
+                                                            }
+
+                                                        </td>
                                                         <td className="name">{value.name_product}</td>
                                                         <td className="name">{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(value.price_product) + ' VNĐ'}</td>
                                                         <td className="name">{value.count}</td>

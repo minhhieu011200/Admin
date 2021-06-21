@@ -98,7 +98,7 @@ function Product() {
                                                         <td className="name">{value._id}</td>
                                                         <td><img src={process.env.REACT_APP_API + value.image} alt="" style={{ width: '70px' }} /></td>
                                                         <td className="name">{value.name_product}</td>
-                                                        <td>{value.price_product}</td>
+                                                        <td>{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(value.price_product) + ' VNĐ'}</td>
                                                         <td>{value.number}</td>
                                                         <td>{value.id_sale ? value.id_sale.describe : ""}</td>
                                                         <td>{value.id_producer ? value.id_producer.producer : ""}</td>
